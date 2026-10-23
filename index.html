@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Náš výlet do Prahy</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Figtree:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#EEF1EC;--card:#FBFBF8;--ink:#1D2B2A;--mute:#5C6B69;--river:#1F4E4A;--roof:#B4432D;--gold:#C79A3B;--line:#D3DAD4;--on:#fff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101A19;--card:#182524;--ink:#EAF0EC;--mute:#9DB0AC;--river:#6FB5AC;--roof:#E27A62;--gold:#E0B85C;--line:#2B3C3A;--on:#101A19}}
+:root[data-theme="dark"]{--bg:#101A19;--card:#182524;--ink:#EAF0EC;--mute:#9DB0AC;--river:#6FB5AC;--roof:#E27A62;--gold:#E0B85C;--line:#2B3C3A;--on:#101A19}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Figtree,system-ui,sans-serif}
+main{max-width:620px;margin:0 auto;padding:20px 16px 48px}
+.ticket{background:var(--river);color:var(--on);border-radius:18px;padding:22px 22px 20px;position:relative;overflow:hidden}
+.ticket::before,.ticket::after{content:"";position:absolute;top:50%;width:26px;height:26px;border-radius:50%;background:var(--bg);transform:translateY(-50%)}
+.ticket::before{left:-13px}.ticket::after{right:-13px}
+.ticket small{opacity:.8;font-size:14px}
+.ticket h1{font:700 clamp(40px,12vw,64px)/1 Fraunces,Georgia,serif;margin:6px 0 4px;letter-spacing:-.02em}
+.ticket p{margin:0;opacity:.9}
+.count{margin-top:16px;padding-top:14px;border-top:2px dashed rgba(255,255,255,.4);display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:15px}
+.count input{font:inherit;border:0;border-radius:8px;padding:6px 8px;background:rgba(255,255,255,.95);color:#1D2B2A}
+.count b{font:700 22px Fraunces,Georgia,serif}
+nav{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 14px}
+nav button{flex:1;font:600 15px Figtree,sans-serif;padding:11px 6px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+nav button[aria-selected=true]{background:var(--roof);border-color:var(--roof);color:#fff}
+button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+h2{font:700 26px/1.2 Fraunces,Georgia,serif;margin:0 0 2px}
+.sub{color:var(--mute);margin:0 0 14px}
+ul{list-style:none;margin:0;padding:0;border-left:3px solid var(--gold);margin-left:8px}
+li{position:relative;padding:0 0 18px 22px}
+li::before{content:"";position:absolute;left:-9px;top:5px;width:15px;height:15px;border-radius:50%;background:var(--bg);border:3px solid var(--gold)}
+li.done::before{background:var(--river);border-color:var(--river)}
+li.done .t{text-decoration:line-through;opacity:.55}
+.row{display:flex;gap:10px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;width:100%;text-align:left;cursor:pointer;font:inherit;color:inherit}
+.time{font-weight:600;color:var(--roof);min-width:64px}
+.t{font-weight:600;display:block}
+.d{color:var(--mute);font-size:14px;display:block}
+.tip{margin-top:6px;padding:10px 14px;border-radius:12px;background:var(--card);border:1px dashed var(--gold);font-size:14px}
+.prog{height:8px;background:var(--line);border-radius:8px;margin:0 0 18px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--river);transition:width .3s}
+footer{text-align:center;color:var(--mute);margin-top:28px;font-size:14px}
+nav button{min-width:76px}
+.bi{display:flex;justify-content:space-between;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px}
+.bi b{white-space:nowrap}
+#tot b{font:700 20px Fraunces,Georgia,serif;color:var(--river)}
+@media (prefers-reduced-motion:reduce){.prog i{transition:none}}
+</style>
+</head>
+<body>
+<main>
+  <header class="ticket">
+    <small>Lístok pre dvoch</small>
+    <h1>Praha</h1>
+    <p>27. až 30. októbra, štyri dni kaviarní, mostov a striech</p>
+  </header>
+
+  <nav role="tablist" id="tabs"></nav>
+  <section id="day"></section>
+  <footer>Odškrtávaj si body klikaním. Tvoje odškrtnutia ostanú v tomto zariadení.</footer>
+</main>
+<script>
+const DAYS=[
+{n:"Ut 27.10.",h:"Utorok: cesta do Prahy",s:"Skoré vstávanie, ale večer už budeme v Prahe.",items:[
+["5:15","Vlak R 740 Ponitran: Topoľčany → Leopoldov","Odchod 5:15, príchod 6:08."],
+["6:18","Vlak R 10704 Považan: Leopoldov → Bratislava hl. st.","Odchod 6:18, príchod 7:15."],
+["8:26","Vlak RJ 1046: Bratislava hl. st. → Praha hl. n.","Odchod 8:26, príchod 12:56. Vo vlaku obedík."],
+["13:00","Vybavenie lístkov MHD","Na predajnom mieste DPP."],
+["poobede","Ubytovanie a odloženie vecí","Krátky oddych po ceste."],
+["poobede","Staré Mesto, Orloj a Karlův most","Prechádzka bez plánu."],
+["večer","Romantická večera","Podľa tvojho výberu &lt;3"],
+["večer","Joystick Bar","Drink pri arkádových automatoch."]],
+tip:"Tip: V Regiojet vlaku si môžeme dať lacný obed a zákusok :)"},
+{n:"St 28.10.",h:"Streda: Hrad a Malá Strana",s:"Najväčší deň. 28. októbra je v Česku štátny sviatok.",items:[
+["9:00","Raňajky a káva","Pomalý štart."],
+["10:00","Pražský hrad","Katedrála sv. Víta, Zlatá ulička a výhľad na mesto."],
+["13:30","Obed v Hradčanoch","Oddych pred zostupom."],
+["15:30","Malá Strana a Kampa","Uličky, schody a pohľad na Čertovku."],
+["19:00","Večera pri Vltave","Rezervácia sa oplatí."]],
+tip:"Tip: Počas sviatku bývajú pamiatky plné, preto na Hrad choď čo najskôr ráno."},
+{n:"Št 29.10.",h:"Štvrtok: Staré Mesto a Vyšehrad",s:"Pokojnejší deň s výhľadmi.",items:[
+["9:30","Dlhé raňajky","Kaviareň podľa nálady."],
+["11:00","Staromestské námestie a orloj","Orloj odbíja každú celú hodinu."],
+["13:00","Obed v Židovskej štvrti","Pohodová prechádzka uličkami."],
+["15:30","Vyšehrad","Kľud, zeleň a výhľad na rieku."],
+["19:30","Posledná večera v Prahe","Plavba po Vltave alebo pivnica."]],
+tip:"Tip: Pred odchodom domov si dopredu skontroluj spoje na piatok."},
+{n:"Pi 30.10.",h:"Piatok: cesta domov",s:"Čas odchodu a spoje doplníme, keď ich budeš mať.",items:[
+["Ráno","Raňajky a odhlásenie z ubytovania","Batožinu si môžeme nechať v úschovni."],
+["Podľa spoja","Cesta vlakom domov","Pridaj sem presné časy a čísla spojov."]],
+tip:"Tip: Pošli mi spoje a doplním ich rovnako ako pri ceste tam."}
+];
+const K="praha-done";let done={},cur=0;
+try{done=JSON.parse(localStorage.getItem(K)||"{}")}catch(e){}
+function save(){try{localStorage.setItem(K,JSON.stringify(done))}catch(e){}}
+const tabs=document.getElementById("tabs"),day=document.getElementById("day");
+DAYS.forEach((d,i)=>{const b=document.createElement("button");b.textContent=d.n;b.setAttribute("role","tab");b.onclick=()=>{cur=i;render()};tabs.appendChild(b)});
+const bb=document.createElement("button");bb.textContent="Rozpočet";bb.setAttribute("role","tab");bb.onclick=()=>{cur=DAYS.length;render()};tabs.appendChild(bb);
+// ROZPOČET: tu si prepíš názvy a sumy v eurách (druhé číslo v každom riadku)
+const BUD=[
+
+["Jedlo a kaviarne",80],
+["Vstup ZOO Praha",16.50],
+["MHD",10.72],
+];
+function eur(v){return v.toLocaleString("sk-SK",{minimumFractionDigits:2,maximumFractionDigits:2})+" €"}
+function renderBud(){
+ const s=BUD.reduce((a,r)=>a+r[1],0);
+ day.innerHTML=`<h2>Rozpočet</h2><p class="sub">Orientačné ceny nášho výletu.</p>${BUD.map(r=>`<div class="bi"><span>${r[0]}</span><b>${r[1]?eur(r[1]):"—"}</b></div>`).join("")}<div class="tip" id="tot">Spolu: <b>${eur(s)}</b><br>Na osobu: <b>${eur(s/2)}</b></div>`;
+}
+function render(){
+ [...tabs.children].forEach((b,i)=>b.setAttribute("aria-selected",i===cur));
+ if(cur===DAYS.length)return renderBud();
+ const d=DAYS[cur];
+ const total=d.items.length,n=d.items.filter((_,j)=>done[cur+"-"+j]).length;
+ day.innerHTML=`<h2>${d.h}</h2><p class="sub">${d.s}</p><div class="prog"><i style="width:${n/total*100}%"></i></div><ul></ul><div class="tip">${d.tip}</div>`;
+ const ul=day.querySelector("ul");
+ d.items.forEach((it,j)=>{
+  const li=document.createElement("li");if(done[cur+"-"+j])li.className="done";
+  li.innerHTML=`<button class="row"><span class="time">${it[0]}</span><span><span class="t">${it[1]}</span><span class="d">${it[2]}</span></span></button>`;
+  li.querySelector("button").onclick=()=>{done[cur+"-"+j]=!done[cur+"-"+j];save();render()};
+  ul.appendChild(li)});
+}
+render();
+</script>
+</body>
+</html>
