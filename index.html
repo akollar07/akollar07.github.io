@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Čo si dáme? 💗</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fff0f5; --card:#ffffff; --ink:#5a1f3a; --soft:#a8607f; --pink:#ff6fa5; --deep:#e0457f; --blush:#ffd6e6; --line:#ffc2da;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#2a1020; --card:#3d1830; --ink:#ffe3ee; --soft:#e6a4c0; --pink:#ff7fb0; --deep:#ff5c97; --blush:#5a2342; --line:#6e2d52;}
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Fredoka','Nunito','Segoe UI',system-ui,sans-serif;min-height:100vh}
+main{max-width:640px;margin:0 auto;padding:28px 18px 48px}
+h1{font-size:2.3rem;font-weight:600;margin:0 0 4px;color:var(--deep);letter-spacing:.2px}
+.sub{margin:0 0 22px;color:var(--soft)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:16px}
+.chip{flex:none;border:2px solid var(--line);background:var(--card);color:var(--ink);font:inherit;padding:7px 15px;border-radius:999px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--pink);border-color:var(--pink);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+.dish{position:relative;border:2px solid var(--line);background:var(--card);color:var(--ink);font:inherit;border-radius:22px;padding:16px 8px 12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;transition:transform .15s,background .15s,border-color .15s}
+.dish:active{transform:scale(.96)}
+.dish .e{font-size:2.4rem;line-height:1}
+.dish .n{font-weight:500;font-size:.98rem;text-align:center}
+.dish .h{position:absolute;top:8px;right:11px;font-size:1.05rem;opacity:.25;transition:opacity .15s,transform .15s}
+.dish[aria-pressed="true"]{background:var(--blush);border-color:var(--pink)}
+.dish[aria-pressed="true"] .h{opacity:1;transform:scale(1.25)}
+.add{display:flex;gap:8px;margin:18px 0 8px}
+.add input{flex:1;min-width:0;font:inherit;padding:11px 16px;border-radius:999px;border:2px solid var(--line);background:var(--card);color:var(--ink)}
+.add button,.go{font:inherit;font-weight:600;border:0;border-radius:999px;background:var(--deep);color:#fff;padding:11px 20px;cursor:pointer}
+.go{display:block;width:100%;font-size:1.2rem;padding:16px;margin-top:16px;box-shadow:0 8px 0 rgba(224,69,127,.28)}
+.go:active{transform:translateY(4px);box-shadow:0 4px 0 rgba(224,69,127,.28)}
+.hint{color:var(--soft);font-size:.9rem;margin:4px 4px 0}
+button:focus-visible,input:focus-visible{outline:3px solid var(--deep);outline-offset:2px}
+.overlay{position:fixed;inset:0;background:rgba(90,31,58,.55);display:none;align-items:center;justify-content:center;padding:24px;z-index:20}
+.overlay.on{display:flex}
+.result{background:var(--card);border-radius:32px;padding:32px 26px;text-align:center;max-width:360px;width:100%;animation:pop .35s cubic-bezier(.3,1.5,.5,1)}
+.result .big{font-size:5rem;line-height:1}
+.result h2{font-size:2rem;margin:10px 0 4px;color:var(--deep)}
+.result p{margin:0 0 20px;color:var(--soft)}
+.result .row{display:flex;gap:8px}
+.result .row button{flex:1}
+.ghost{background:var(--blush)!important;color:var(--ink)!important}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+@media (prefers-reduced-motion:reduce){.result{animation:none}.dish{transition:none}}
+</style>
+</head>
+<body>
+<main>
+  <h1>Čo si dáme? 💗</h1>
+  <p class="sub">Ťukni na všetko, na čo máš chuť. Ak si nevieš vybrať, vyberie za teba srdiečko.</p>
+
+  <div class="chips" id="chips"></div>
+  <div class="grid" id="grid"></div>
+
+  <form class="add" id="addForm" onsubmit="return false">
+    <input id="newName" placeholder="Pridaj vlastné jedlo" maxlength="30" aria-label="Názov jedla">
+    <button type="button" id="addBtn">Pridať</button>
+  </form>
+  <p class="hint" id="hint"></p>
+
+  <button class="go" id="go">Vyber za mňa 🎀</button>
+</main>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-label="Výsledok">
+  <div class="result">
+    <div class="big" id="rE"></div>
+    <h2 id="rN"></h2>
+    <p>Dnes jeme toto.</p>
+    <div class="row">
+      <button class="ghost" id="again">Ešte raz</button>
+      <button id="ok">Super</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var cats=["Všetko","Talianske","Ázijské","Slovenské","Rýchle","Sladké"];
+var dishes=[
+ {n:"Pizza",e:"🍕",c:"Talianske"},{n:"Cestoviny",e:"🍝",c:"Talianske"},{n:"Lasagne",e:"🧀",c:"Talianske"},
+ {n:"Sushi",e:"🍣",c:"Ázijské"},{n:"Ramen",e:"🍜",c:"Ázijské"},{n:"Pad thai",e:"🥡",c:"Ázijské"},
+ {n:"Bryndzové halušky",e:"🥔",c:"Slovenské"},{n:"Vyprážaný syr",e:"🧀",c:"Slovenské"},{n:"Guláš",e:"🍲",c:"Slovenské"},
+ {n:"Burger",e:"🍔",c:"Rýchle"},{n:"Kebab",e:"🌯",c:"Rýchle"},{n:"Hranolky",e:"🍟",c:"Rýchle"},
+ {n:"Palacinky",e:"🥞",c:"Sladké"},{n:"Zmrzlina",e:"🍦",c:"Sladké"},{n:"Torta",e:"🍰",c:"Sladké"},
+ {n:"Šalát",e:"🥗",c:"Rýchle"}
+];
+var cat="Všetko", picked={}, last=null;
+var $=function(id){return document.getElementById(id)};
+
+function visible(){return dishes.filter(function(d){return cat==="Všetko"||d.c===cat})}
+function render(){
+  $("chips").innerHTML="";
+  cats.forEach(function(c){
+    var b=document.createElement("button");b.className="chip";b.textContent=c;
+    b.setAttribute("aria-pressed",c===cat);
+    b.onclick=function(){cat=c;render()};
+    $("chips").appendChild(b);
+  });
+  $("grid").innerHTML="";
+  visible().forEach(function(d){
+    var b=document.createElement("button");b.className="dish";
+    b.setAttribute("aria-pressed",!!picked[d.n]);
+    b.innerHTML='<span class="h">💗</span><span class="e">'+d.e+'</span><span class="n"></span>';
+    b.querySelector(".n").textContent=d.n;
+    b.onclick=function(){picked[d.n]=!picked[d.n];render()};
+    $("grid").appendChild(b);
+  });
+  var n=dishes.filter(function(d){return picked[d.n]}).length;
+  $("hint").textContent=n?("Vybrané: "+n+". Srdiečko vyberie len z nich."):"Zatiaľ nič nevybrané, srdiečko vyberie zo všetkého.";
+}
+function spin(){
+  var pool=dishes.filter(function(d){return picked[d.n]});
+  if(!pool.length)pool=visible();
+  if(pool.length>1&&last)pool=pool.filter(function(d){return d.n!==last});
+  var d=pool[Math.floor(Math.random()*pool.length)];
+  last=d.n;$("rE").textContent=d.e;$("rN").textContent=d.n;$("ov").classList.add("on");
+}
+function add(){
+  var v=$("newName").value.trim();if(!v)return;
+  dishes.unshift({n:v,e:"🍽️",c:cat==="Všetko"?"Rýchle":cat});
+  picked[v]=true;$("newName").value="";render();
+}
+$("go").onclick=spin;$("again").onclick=spin;
+$("ok").onclick=function(){$("ov").classList.remove("on")};
+$("addBtn").onclick=add;
+$("newName").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();add()}});
+render();
+</script>
+</body>
+</html>
