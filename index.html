@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Náš výlet do Prahy</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Figtree:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#EEF1EC;--card:#FBFBF8;--ink:#1D2B2A;--mute:#5C6B69;--river:#1F4E4A;--roof:#B4432D;--gold:#C79A3B;--line:#D3DAD4;--on:#fff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101A19;--card:#182524;--ink:#EAF0EC;--mute:#9DB0AC;--river:#6FB5AC;--roof:#E27A62;--gold:#E0B85C;--line:#2B3C3A;--on:#101A19}}
+:root[data-theme="dark"]{--bg:#101A19;--card:#182524;--ink:#EAF0EC;--mute:#9DB0AC;--river:#6FB5AC;--roof:#E27A62;--gold:#E0B85C;--line:#2B3C3A;--on:#101A19}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Figtree,system-ui,sans-serif}
+main{max-width:620px;margin:0 auto;padding:20px 16px 48px}
+.ticket{background:var(--river);color:var(--on);border-radius:18px;padding:22px 22px 20px;position:relative;overflow:hidden}
+.ticket::before,.ticket::after{content:"";position:absolute;top:50%;width:26px;height:26px;border-radius:50%;background:var(--bg);transform:translateY(-50%)}
+.ticket::before{left:-13px}.ticket::after{right:-13px}
+.ticket small{opacity:.8;font-size:14px}
+.ticket h1{font:700 clamp(40px,12vw,64px)/1 Fraunces,Georgia,serif;margin:6px 0 4px;letter-spacing:-.02em}
+.ticket p{margin:0;opacity:.9}
+.count{margin-top:16px;padding-top:14px;border-top:2px dashed rgba(255,255,255,.4);display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:15px}
+.count input{font:inherit;border:0;border-radius:8px;padding:6px 8px;background:rgba(255,255,255,.95);color:#1D2B2A}
+.count b{font:700 22px Fraunces,Georgia,serif}
+nav{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 14px}
+nav button{flex:1;font:600 15px Figtree,sans-serif;padding:11px 6px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+nav button[aria-selected=true]{background:var(--roof);border-color:var(--roof);color:#fff}
+button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+h2{font:700 26px/1.2 Fraunces,Georgia,serif;margin:0 0 2px}
+.sub{color:var(--mute);margin:0 0 14px}
+ul{list-style:none;margin:0;padding:0;border-left:3px solid var(--gold);margin-left:8px}
+li{position:relative;padding:0 0 18px 22px}
+li::before{content:"";position:absolute;left:-9px;top:5px;width:15px;height:15px;border-radius:50%;background:var(--bg);border:3px solid var(--gold)}
+li.done::before{background:var(--river);border-color:var(--river)}
+li.done .t{text-decoration:line-through;opacity:.55}
+.row{display:flex;gap:10px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;width:100%;text-align:left;cursor:pointer;font:inherit;color:inherit}
+.time{font-weight:600;color:var(--roof);min-width:64px}
+.t{font-weight:600;display:block}
+.d{color:var(--mute);font-size:14px;display:block}
+.tip{margin-top:6px;padding:10px 14px;border-radius:12px;background:var(--card);border:1px dashed var(--gold);font-size:14px}
+.prog{height:8px;background:var(--line);border-radius:8px;margin:0 0 18px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--river);transition:width .3s}
+footer{text-align:center;color:var(--mute);margin-top:28px;font-size:14px}
+nav button{min-width:76px}
+.bi{display:flex;justify-content:space-between;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px}
+.bi b{white-space:nowrap}
+.bi.sel{border-color:var(--roof);box-shadow:0 0 0 2px var(--roof)}
+#tot b{font:700 20px Fraunces,Georgia,serif;color:var(--river)}
+.gate{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:20px}
+.gate[hidden]{display:none}
+.gate form{width:100%;max-width:360px;background:var(--river);color:var(--on);border-radius:18px;padding:26px 22px;text-align:center}
+.gate h1{font:700 48px/1 Fraunces,Georgia,serif;margin:0 0 6px}
+.gate p{margin:0 0 16px;opacity:.9}
+.gate input{width:100%;font:inherit;border:0;border-radius:10px;padding:12px;text-align:center;background:rgba(255,255,255,.95);color:#1D2B2A}
+.gate button{margin-top:12px;width:100%;font:600 16px Figtree,sans-serif;padding:12px;border:0;border-radius:10px;background:var(--roof);color:#fff;cursor:pointer}
+#ge{min-height:22px;margin-top:10px;font-size:14px}
+body.locked main{display:none}
+.sel{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.sel select{flex:1 1 150px;font:inherit;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;min-width:0}
+.leg{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:12px}
+.badge{display:inline-block;color:#fff;font-weight:700;border-radius:8px;padding:2px 10px;margin-right:8px}
+.leg ol{list-style:none;margin:10px 0 0 6px;padding:0 0 0 14px;border-left:4px solid var(--c)}
+.leg li{padding:2px 0;display:flex;justify-content:space-between;gap:10px}
+.ti{color:var(--mute);font-size:14px;font-weight:400}.leg li::before{content:none}
+.leg li.end{font-weight:700}
+@media (prefers-reduced-motion:reduce){.prog i{transition:none}}
+</style>
+</head>
+<body class="locked">
+<div id="gate" class="gate">
+  <form id="gf">
+    <h1>Praha</h1>
+    <p>Zadaj heslo</p>
+    <input id="gp" type="password" autocomplete="off" aria-label="Heslo">
+    <button type="submit">Odomknúť</button>
+    <div id="ge" role="alert"></div>
+  </form>
+</div>
+<main>
+  <header class="ticket">
+    <small>Lístok pre dvoch</small>
+    <h1>Praha</h1>
+    <p>27. až 30. októbra, štyri dni kaviarní, mostov a striech</p>
+  </header>
+
+  <nav role="tablist" id="tabs"></nav>
+  <section id="day"></section>
+  <footer>Odškrtávaj si body klikaním. Tvoje odškrtnutia ostanú v tomto zariadení.</footer>
+</main>
+<script>
+const DAYS=[
+{n:"Ut 27.10.",h:"Utorok: cesta do Prahy",s:"Skoré vstávanie, ale večer už budeme v Prahe.",items:[
+["5:15","Vlak R 740 Ponitran: Topoľčany → Leopoldov","Odchod 5:15, príchod 6:08."],
+["6:18","Vlak R 10704 Považan: Leopoldov → Bratislava hl. st.","Odchod 6:18, príchod 7:15."],
+["8:26","Vlak RJ 1046: Bratislava hl. st. → Praha hl. n.","Odchod 8:26, príchod 12:56. Vo vlaku obedík."],
+["13:00","Vybavenie lístkov MHD","Na predajnom mieste DPP."],
+["poobede","Ubytovanie a odloženie vecí","Krátky oddych po ceste."],
+["poobede","Staré Mesto, Orloj a Karlův most","Prechádzka bez plánu."],
+["večer","Romantická večera","Podľa tvojho výberu &lt;3"],
+["večer","Joystick Bar","Drink pri arkádových automatoch."]],
+tip:"Tip: V Regiojet vlaku si môžeme dať lacný obed a zákusok :)"},
+{n:"St 28.10.",h:"Streda: Hrad a Malá Strana",s:"Najväčší deň. 28. októbra je v Česku štátny sviatok.",items:[
+["9:00","Raňajky a káva","Pomalý štart."],
+["10:00","Pražský hrad","Katedrála sv. Víta, Zlatá ulička a výhľad na mesto."],
+["13:30","Obed v Hradčanoch","Oddych pred zostupom."],
+["15:30","Malá Strana a Kampa","Uličky, schody a pohľad na Čertovku."],
+["19:00","Večera pri Vltave","Rezervácia sa oplatí."]],
+tip:"Tip: Počas sviatku bývajú pamiatky plné, preto na Hrad choď čo najskôr ráno."},
+{n:"Št 29.10.",h:"Štvrtok: Staré Mesto a Vyšehrad",s:"Pokojnejší deň s výhľadmi.",items:[
+["9:30","Dlhé raňajky","Kaviareň podľa nálady."],
+["11:00","Staromestské námestie a orloj","Orloj odbíja každú celú hodinu."],
+["13:00","Obed v Židovskej štvrti","Pohodová prechádzka uličkami."],
+["15:30","Vyšehrad","Kľud, zeleň a výhľad na rieku."],
+["19:30","Posledná večera v Prahe","Plavba po Vltave alebo pivnica."]],
+tip:"Tip: Pred odchodom domov si dopredu skontroluj spoje na piatok."},
+{n:"Pi 30.10.",h:"Piatok: cesta domov",s:"Čas odchodu a spoje doplníme, keď ich budeš mať.",items:[
+["Ráno","Raňajky a odhlásenie z ubytovania","Batožinu si môžeme nechať v úschovni."],
+["Podľa spoja","Cesta vlakom domov","Pridaj sem presné časy a čísla spojov."]],
+tip:"Tip: Pošli mi spoje a doplním ich rovnako ako pri ceste tam."}
+];
+const K="praha-done";let done={},cur=0;
+try{done=JSON.parse(localStorage.getItem(K)||"{}")}catch(e){}
+function save(){try{localStorage.setItem(K,JSON.stringify(done))}catch(e){}}
+const tabs=document.getElementById("tabs"),day=document.getElementById("day");
+DAYS.forEach((d,i)=>{const b=document.createElement("button");b.textContent=d.n;b.setAttribute("role","tab");b.onclick=()=>{cur=i;render()};tabs.appendChild(b)});
+["MHD","Rozpočet"].forEach((t,k)=>{const b=document.createElement("button");b.textContent=t;b.setAttribute("role","tab");b.onclick=()=>{cur=DAYS.length+k;render()};tabs.appendChild(b)});
+// ROZPOČET: tu si prepíš názvy a sumy v eurách (druhé číslo v každom riadku)
+const BUD=[
+
+["Jedlo a kaviarne",80],
+["Vstup ZOO Praha",16.50],
+["MHD",10.72],
+];
+function eur(v){return v.toLocaleString("sk-SK",{minimumFractionDigits:2,maximumFractionDigits:2})+" €"}
+function renderBud(){
+ const s=BUD.reduce((a,r)=>a+r[1],0);
+ day.innerHTML=`<h2>Rozpočet</h2><p class="sub">Orientačné ceny nášho výletu.</p>${BUD.map(r=>`<div class="bi"><span>${r[0]}</span><b>${r[1]?eur(r[1]):"—"}</b></div>`).join("")}<div class="tip" id="tot">Spolu: <b>${eur(s)}</b><br>Na osobu: <b>${eur(s/2)}</b></div>`;
+}
+// MHD: metro A, B, C a autobus 112 do ZOO (len konečné zastávky). Tu uprav alebo pridaj linky. "c" je farba linky, "stops" sú zastávky v poradí, ako idú za sebou.
+// Prestupy sa hľadajú automaticky, ak majú dve linky rovnakú zastávku (rovnaký názov).
+let LINES=[
+{n:"Metro A",c:"#1A9B53",stops:["Nemocnice Motol","Petřiny","Nádraží Veleslavín","Bořislavka","Dejvická","Hradčanská","Malostranská","Staroměstská","Můstek","Muzeum","Náměstí Míru","Jiřího z Poděbrad","Flora","Želivského","Strašnická","Skalka","Depo Hostivař"]},
+{n:"Metro B",c:"#C98A00",stops:["Zličín","Stodůlky","Luka","Lužiny","Hůrka","Nové Butovice","Jinonice","Radlická","Smíchovské nádraží","Anděl","Karlovo náměstí","Národní třída","Můstek","Náměstí Republiky","Florenc","Křižíkova","Invalidovna","Palmovka","Českomoravská","Vysočanská","Kolbenova","Hloubětín","Rajská zahrada","Černý Most"]},
+{n:"Metro C",c:"#D6232A",stops:["Letňany","Prosek","Střížkov","Ládví","Kobylisy","Nádraží Holešovice","Vltavská","Florenc","Hlavní nádraží","Muzeum","I. P. Pavlova","Vyšehrad","Pražského povstání","Pankrác","Roztyly","Chodov","Opatov","Háje"]},
+{n:"Bus 112",c:"#0A6AA8",stops:["Nádraží Holešovice","Zoo Praha-Troja"]}
+];
+let mf="",mt="";
+function seg(L,i,j){return i<j?L.stops.slice(i,j+1):L.stops.slice(j,i+1).reverse()}
+function path(f,t){
+ for(const L of LINES){const i=L.stops.indexOf(f),j=L.stops.indexOf(t);if(i>=0&&j>=0)return[{L,s:seg(L,i,j)}]}
+ let best=null;
+ for(const A of LINES){const i=A.stops.indexOf(f);if(i<0)continue;
+  for(const B of LINES){if(B===A)continue;const j=B.stops.indexOf(t);if(j<0)continue;
+   for(const x of A.stops){const a=A.stops.indexOf(x),b=B.stops.indexOf(x);if(b<0)continue;
+    const s1=seg(A,i,a),s2=seg(B,b,j),n=s1.length+s2.length;
+    if(!best||n<best.n)best={n,r:[{L:A,s:s1},{L:B,s:s2}]}}}}
+ return best&&best.r;
+}
+function zast(n){return n===1?"zastávka":n<5?"zastávky":"zastávok"}
+// ODCHODY V REÁLNOM ČASE (Golemio): vlož API kľúč z https://api.golemio.cz/api-keys/ . Ak je prázdny, odchody sa nezobrazujú.
+const GOLEMIO_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjU2MiwiaWF0IjoxNzkyODY0Mjc1LCJleHAiOjExNzkyODY0Mjc1LCJpc3MiOiJnb2xlbWlvIiwianRpIjoiNjBiNzM0MzItZmY5MC00YWM1LWE3NmMtNGRmM2Y1NTY2ZTFhIn0.H7EraKRvt5LhIXcuBKIXA1rUayx58-x6B0yCdle3hZQ";
+const GOLEMIO_URL="https://api.golemio.cz/v2/pid/departureboards";
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+// NÁZVY MIEST: vľavo je presný názov zastávky z dát (mhd.json / LINES), vpravo miesto, kam sa tam dostaneme.
+// V trasách sa ukáže "Zastávka (Miesto)", v rozbaľovacích zoznamoch len názov miesta.
+// Do Golemio sa vždy posiela pôvodný názov zastávky, premenovanie je len na zobrazenie.
+const ALIAS={
+"Zborov":"A&O Rhea Prague, ubytovanie",
+"Zoo Praha-Troja":"ZOO Praha a Botanická zahrada",
+"Zoologická zahrada":"ZOO Praha a Botanická zahrada",
+"Malostranská":"Poslanecká sněmovna a Strakova akademie",
+"Staroměstská":"Staré Město, Orloj, Karlův most"
+};
+// Zastávky, ktoré sa v zozname ukážu hore v skupine "Naše miesta" (v tomto poradí):
+const MIESTA=["Zborov","Hlavní nádraží","Zoo Praha-Troja","Malostranská"];
+const lbl=n=>esc(ALIAS[n]||n); // len názov miesta (rozbaľovacie zoznamy)
+const rl=n=>ALIAS[n]?esc(n)+" ("+esc(ALIAS[n])+")":esc(n); // reálna zastávka a v zátvorke miesto (trasy)
+function termOf(g){const st=g.L.stops;return st.indexOf(g.s[0])<st.indexOf(g.s[g.s.length-1])?st[st.length-1]:st[0]}
+const nrm=t=>String(t||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();
+const PRESTUP_MIN=2; // minúty na presun medzi nástupišťami pri prestupe
+// Odhad jazdy: minúty na jednu zastávku. Dá sa nastaviť pri linke cez "m" (napr. {n:"Metro A",m:1.8,...}).
+function perStop(L){return L.m||(L.n.startsWith("Metro")?2:L.n.startsWith("Tram")?2.5:3)}
+const legDur=g=>(g.s.length-1)*perStop(g.L);
+const addMin=(d,m)=>new Date(d.getTime()+m*60000);
+const fmt=d=>d.toLocaleTimeString("sk-SK",{hour:"2-digit",minute:"2-digit"});
+async function fetchDep(g,off){
+ const line=g.L.n.split(" ").pop(),stop=g.s[0],exit=g.s[g.s.length-1],st=g.L.stops,ie=st.indexOf(exit);
+ const okSet=new Set((st.indexOf(stop)<ie?st.slice(ie):st.slice(0,ie+1)).map(nrm));
+ const r=await fetch(GOLEMIO_URL+"?names[]="+encodeURIComponent(stop)+"&total=12&minutesAfter="+(off+60)+(off?"&minutesBefore=-"+off:"")+"&preferredTimezone=Europe%2FPrague",{headers:{"X-Access-Token":GOLEMIO_KEY}});
+ if(!r.ok)throw new Error("chyba "+r.status);
+ const d=await r.json();
+ const all=(d.departures||[]).filter(x=>x.route&&x.route.short_name===line).map(x=>{
+  const ts=x.departure_timestamp||{},t=ts.predicted||ts.scheduled;
+  return{t:t?new Date(t):null,h:x.trip?x.trip.headsign:"",late:x.delay&&x.delay.minutes>0?x.delay.minutes:0}}).filter(x=>x.t&&!isNaN(x.t));
+ const dir=all.filter(x=>okSet.has(nrm(x.h)));
+ return{line,list:dir.length?dir:all,note:dir.length||!all.length?"":"Smer sa nepodarilo overiť, ukazujem všetky odchody linky."};
+}
+function drawDeps(box,head,res,sel,onPick){
+ box.innerHTML=head+(res.note?'<div style="font-size:13px;color:var(--mute)">'+esc(res.note)+"</div>":"");
+ const wrap=document.createElement("div");wrap.style.marginTop="8px";
+ res.list.slice(0,5).forEach((x,i)=>{
+  const row=document.createElement("div");row.className="bi"+(onPick&&i===sel?" sel":"");
+  row.innerHTML=`<span>${esc(res.line)} → ${rl(x.h)}</span><b>${fmt(x.t)}${x.late?" (+"+x.late+" min)":""}</b>`;
+  if(onPick){row.style.cursor="pointer";row.onclick=()=>onPick(i)}
+  wrap.appendChild(row)});
+ box.appendChild(wrap);
+}
+async function loadDeps(p,boxes,root){
+ const sum=root.querySelector("#sum");
+ const fill=(k,start)=>root.querySelectorAll('.ti[data-l="'+k+'"]').forEach(el=>{el.textContent=start?fmt(addMin(start,+el.dataset.i*perStop(p[k].L))):""});
+ const summary=(t0,arr,wait)=>{if(!sum)return;sum.innerHTML=`<b>Spolu ${Math.round((arr-t0)/60000)} min</b> · odchod ${fmt(t0)} → príchod ${fmt(arr)}`+(wait!=null?`<br>Z toho čakanie na prestupe: ${Math.round(wait)} min`:"")+'<div style="font-size:13px;color:var(--mute);margin-top:4px">Časy pri zastávkách sú odhad.</div>'};
+ let res0;
+ try{res0=await fetchDep(p[0],0)}catch(e){boxes[0].textContent="Odchody sa nepodarilo načítať ("+e.message+").";if(boxes[1])boxes[1].textContent="";return}
+ res0.list=res0.list.slice(0,5);
+ const L0=res0.list,two=!!p[1];
+ const head0="<b>Odchody: "+rl(p[0].s[0])+" → smer "+rl(termOf(p[0]))+"</b>"+(two&&L0.length?'<div style="font-size:13px;color:var(--mute)">Klikni na odchod, ktorým pôjdeš.</div>':"");
+ let tok=0;
+ async function second(sel){
+  const my=++tok,t0=L0.length?L0[sel].t:null;
+  fill(0,t0);fill(1,null);
+  if(!two){if(t0)summary(t0,addMin(t0,legDur(p[0])));return}
+  const box=boxes[1];
+  const base=t0||new Date();
+  const arr=addMin(base,legDur(p[0])),ready=addMin(arr,PRESTUP_MIN);
+  const off=Math.max(0,Math.ceil((ready-Date.now())/60000));
+  const head="<b>Prestup: "+rl(p[1].s[0])+" → smer "+rl(termOf(p[1]))+'</b><div style="font-size:13px;color:var(--mute)">Príchod asi o '+fmt(arr)+" (odhad), odchody od "+fmt(ready)+"</div>";
+  box.innerHTML="Načítavam odchody na prestup…";
+  try{
+   const r=await fetchDep(p[1],off);
+   if(my!==tok)return;
+   r.list=r.list.filter(x=>x.t>=ready);
+   if(!r.list.length){box.innerHTML=head+"Žiadne odchody v najbližšom čase.";return}
+   drawDeps(box,head,r,0,null);
+   const t1=r.list[0].t;
+   fill(1,t1);
+   if(t0)summary(t0,addMin(t1,legDur(p[1])),(t1-arr)/60000);
+  }catch(e){if(my===tok)box.textContent="Odchody sa nepodarilo načítať ("+e.message+").";}
+ }
+ const pick=sel=>{drawDeps(boxes[0],head0,res0,sel,two&&L0.length?pick:null);second(sel)};
+ if(L0.length)pick(0);
+ else{boxes[0].innerHTML=head0+"V najbližšej hodine nie sú žiadne odchody.";second(0)}
+}
+function renderMhd(){
+ const all=[...new Set(LINES.flatMap(L=>L.stops))].sort((a,b)=>a.localeCompare(b,"cs"));
+ const mine=MIESTA.filter(x=>all.includes(x)),oo=x=>`<option value="${x}">${lbl(x)}</option>`;
+ const opts=(mine.length?'<optgroup label="Naše miesta">'+mine.map(oo).join("")+'</optgroup><optgroup label="Ostatné zastávky">':"")+all.filter(x=>!mine.includes(x)).map(oo).join("")+(mine.length?"</optgroup>":"");
+ day.innerHTML=`<h2>MHD</h2><p class="sub">Vyber miesto nástupu a výstupu a ukážem ti trasu.</p><p class="sub" style="font-size:13px">Zdroj trás: ${SRC}</p><div class="sel"><select id="mf" aria-label="Nástup"><option value="">Nástup</option>${opts}</select><select id="mt" aria-label="Výstup"><option value="">Výstup</option>${opts}</select></div><div id="mr"></div>`;
+ const F=day.querySelector("#mf"),T=day.querySelector("#mt"),R=day.querySelector("#mr");
+ F.value=mf;T.value=mt;
+ function show(){
+  mf=F.value;mt=T.value;
+  if(!mf||!mt){R.innerHTML="";return}
+  if(mf===mt){R.innerHTML='<div class="tip">Nástup a výstup sú rovnaké.</div>';return}
+  const p=path(mf,mt);
+  if(!p){R.innerHTML='<div class="tip">Trasu medzi týmito zastávkami nemám v zozname.</div>';return}
+  const est=p.reduce((a,g)=>a+legDur(g),0)+(p.length-1)*PRESTUP_MIN;
+  R.innerHTML=`<div class="tip" id="sum" style="margin:0 0 12px">Odhad celej cesty: <b>~${Math.round(est)} min</b>${p.length>1?" (vrátane prestupu)":""}</div>`+p.map((g,k)=>`${k?`<p class="sub">Prestup na zastávke <b>${rl(g.s[0])}</b></p>`:""}<div class="leg" style="--c:${g.L.c}"><span class="badge" style="background:${g.L.c}">${g.L.n}</span>→ <b>${rl(termOf(g))}</b> · ${g.s.length-1} ${zast(g.s.length-1)} · ~${Math.round(legDur(g))} min<ol>${g.s.map((x,i)=>`<li class="${i===0||i===g.s.length-1?"end":""}"><span>${rl(x)}</span><span class="ti" data-l="${k}" data-i="${i}"></span></li>`).join("")}</ol></div>${GOLEMIO_KEY?'<div class="tip dep">Načítavam odchody…</div>':""}`).join("");
+  if(GOLEMIO_KEY)loadDeps(p,[...R.querySelectorAll(".dep")],R);
+ }
+ F.onchange=T.onchange=show;show();
+}
+// Ak je vedľa súboru mhd.json (vytvorí ho gtfs_to_json.py), použijú sa linky z neho. Vstavané linky, ktoré v ňom nie sú (napr. Bus 112), ostanú navyše.
+let SRC="vstavané linky (mhd.json sa nenačítal)";
+fetch("mhd.json").then(r=>r.ok?r.json():Promise.reject()).then(d=>{if(Array.isArray(d)&&d.length){LINES=d.concat(LINES.filter(x=>!d.some(y=>y.n===x.n)));SRC="mhd.json ("+d.length+" liniek) a vstavané linky navyše";if(cur===DAYS.length)render()}}).catch(()=>{});
+function render(){
+ [...tabs.children].forEach((b,i)=>b.setAttribute("aria-selected",i===cur));
+ if(cur===DAYS.length)return renderMhd();
+ if(cur===DAYS.length+1)return renderBud();
+ const d=DAYS[cur];
+ const total=d.items.length,n=d.items.filter((_,j)=>done[cur+"-"+j]).length;
+ day.innerHTML=`<h2>${d.h}</h2><p class="sub">${d.s}</p><div class="prog"><i style="width:${n/total*100}%"></i></div><ul></ul><div class="tip">${d.tip}</div>`;
+ const ul=day.querySelector("ul");
+ d.items.forEach((it,j)=>{
+  const li=document.createElement("li");if(done[cur+"-"+j])li.className="done";
+  li.innerHTML=`<button class="row"><span class="time">${it[0]}</span><span><span class="t">${it[1]}</span><span class="d">${it[2]}</span></span></button>`;
+  li.querySelector("button").onclick=()=>{done[cur+"-"+j]=!done[cur+"-"+j];save();render()};
+  ul.appendChild(li)});
+}
+render();
+const PW="timdam";
+(function(){
+ const g=document.getElementById("gate"),f=document.getElementById("gf"),i=document.getElementById("gp"),e=document.getElementById("ge");
+ let ok=false;try{ok=localStorage.getItem("praha-ok")==="1"}catch(x){}
+ function open(){g.hidden=true;document.body.classList.remove("locked")}
+ if(ok)return open();
+ f.onsubmit=ev=>{ev.preventDefault();if(i.value.trim().toLowerCase()===PW){try{localStorage.setItem("praha-ok","1")}catch(x){}open()}else{e.textContent="Nesprávne heslo, skús to znova.";i.value="";i.focus()}};
+ i.focus();
+})();
+</script>
+</body>
+</html>
