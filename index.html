@@ -173,7 +173,7 @@ const ALIAS={
 "Staroměstská":"Staré Město, Orloj, Karlův most"
 };
 // Zastávky, ktoré sa v zozname ukážu hore v skupine "Naše miesta" (v tomto poradí):
-const MIESTA=["Zborov","Hlavní nádraží","Zoo Praha-Troja","Malostranská"];
+const MIESTA=["Zborov","Hlavní nádraží","Zoo Praha-Troja","Malostranská","Staroměstská"];
 const lbl=n=>esc(ALIAS[n]||n); // len názov miesta (rozbaľovacie zoznamy)
 const rl=n=>ALIAS[n]?esc(n)+" ("+esc(ALIAS[n])+")":esc(n); // reálna zastávka a v zátvorke miesto (trasy)
 function termOf(g){const st=g.L.stops;return st.indexOf(g.s[0])<st.indexOf(g.s[g.s.length-1])?st[st.length-1]:st[0]}
